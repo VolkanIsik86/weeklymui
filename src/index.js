@@ -7,6 +7,7 @@ import { ThemeProvider} from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import {HashRouter} from "react-router-dom";
 import {createTheme} from "@material-ui/core";
+import {userStore} from "./stores/UserStore";
 
 const theme = createTheme({
     palette: {
@@ -17,11 +18,10 @@ const theme = createTheme({
 
 
 ReactDOM.render(
-
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <HashRouter>
-                    <App />
+                    <App store={userStore} />
             </HashRouter>
         </ThemeProvider>,
     document.getElementById('root')

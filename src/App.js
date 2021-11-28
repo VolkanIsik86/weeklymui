@@ -1,20 +1,20 @@
 import * as React from 'react';
 import {Route, Switch} from "react-router-dom";
-
 import Home from "./Home";
-import UserStore from "./stores/UserStore";
 import {observer} from "mobx-react-lite";
-import Layout from "./Layout";
+import NavMenu from "./NavMenu";
+import {Box} from "@mui/material";
 
-const userStore = new UserStore();
-function App() {
+
+function App(props) {
   return(
-      <Layout store={userStore}>
+      <Box>
+      <NavMenu store={props.store} />
         <Switch>
           <Route exact path={"/"} component={Home}/>
           <Route render={() => <h1>404</h1>}/>
         </Switch>
-      </Layout>
+      </Box>
   );
 }
 

@@ -11,14 +11,15 @@ import {
     TextField
 } from "@material-ui/core";
 import {AccountCircle} from "@mui/icons-material";
+import {observer} from "mobx-react-lite";
 
 
-export default function NavMenu(props){
+function NavMenu(props){
     const [open, setOpen] = React.useState(false);
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const store = props.store;
-    const user = store.user;
+
     const anchorMenu = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -40,7 +41,7 @@ export default function NavMenu(props){
             token: null,
             username: null
         }
-        store.user.setUser(tempuser)
+        store.setUser(tempuser);
         console.log(store.user.logged)
         setOpen(false);
     };
@@ -51,7 +52,7 @@ export default function NavMenu(props){
                 <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                     Weekly
                 </Typography>
-                {user.logged ? (
+                {store.user.logged ? (
                     <div>
                         <IconButton
                             size="large"
@@ -120,3 +121,4 @@ export default function NavMenu(props){
 
     );
 }
+export default observer(NavMenu);

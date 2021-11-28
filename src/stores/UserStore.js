@@ -1,18 +1,17 @@
-import {makeObservable, observable, runInAction} from "mobx";
+import {makeAutoObservable, runInAction} from "mobx";
 
-export default class UserStore{
+class UserStore{
     user = {
         logged : false,
         token: null,
         username: null
     }
     constructor() {
-        makeObservable(this,{
-            user: observable
-        })
+        makeAutoObservable(this);
     }
 
     setUser(user){
         runInAction(()=> this.user = user );
     }
 }
+export const userStore = new UserStore()
