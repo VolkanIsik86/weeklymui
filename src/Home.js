@@ -1,5 +1,5 @@
 import React from "react";
-import {Grid, TextField} from "@material-ui/core";
+import {createTheme, Grid, TextField, ThemeProvider} from "@mui/material";
 import {Button, Card, CardActions, CardContent, Typography} from "@mui/material";
 import DatePicker from '@mui/lab/DatePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
@@ -12,7 +12,7 @@ export default function Home(){
 
         <Grid container spacing={2}>
             <Grid item xs={6}>
-                <Card sx={{ minWidth: 275 }}>
+                <Card sx={{ minWidth: 275}}>
                     <CardContent>
                         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                             Gubi
