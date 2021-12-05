@@ -1,26 +1,24 @@
 import React from "react";
-import {createTheme, Grid, TextField, ThemeProvider} from "@mui/material";
+import {Box, createTheme, Grid, TextField, ThemeProvider} from "@mui/material";
 import {Button, Card, CardActions, CardContent, Typography} from "@mui/material";
 import DatePicker from '@mui/lab/DatePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-
+import Timer from "./timer2/Timer";
+import './timer2/flipdown.css'
 export default function Home(){
     const [value, setValue] = React.useState(null);
 
     return(
-
+<Box>
         <Grid container spacing={2}>
             <Grid item xs={6}>
                 <Card sx={{ minWidth: 275}}>
                     <CardContent>
-                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                        <Typography sx={{ fontSize: 28 }} color="text.secondary" gutterBottom>
                             Gubi
                         </Typography>
-
-                        <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                            72:00:00
-                        </Typography>
+                        <Timer />
                     </CardContent>
                     <CardActions>
                         <Button size="small">Mad</Button>
@@ -40,7 +38,7 @@ export default function Home(){
                 </LocalizationProvider>
             </Grid>
         </Grid>
-
+</Box>
     );
 
 }
