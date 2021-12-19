@@ -1,60 +1,47 @@
 import {Box, Typography} from "@mui/material";
-import {useState} from "react";
+import React, { useEffect, useState } from "react";
+import {timerStore} from "../stores/TimerStore";
+import {observer} from "mobx-react-lite";
 
 
-export default function Timer(){
-
-    const [day, setDay] = useState(0);
-    const [hour, setHour] = useState(0);
-    const [minute, setMinute] = useState(0);
-    const [second, setSecond] = useState(0);
-
-    var countDownDate = 0;
-
-    var requestOptions = {
-        method: 'GET',
-        redirect: 'follow'
-    };
-
-    fetch("http://localhost:47340/Gubi", requestOptions)
-        .then(response => response.json())
-        .then(result => {
-            console.log(result)
-            countDownDate = result.timestamp
-        })
-        .catch(error => console.log('error', error));
+function Timer(){
 
 
+    const calculateTimeLeft = () => {
+        let countDownDate = timerStore.timer.timestamp * 1000;
+        let now = new Date().getTime();
+        let difference = countDownDate - now;
+        let timeLeft = {};
+
+        if (difference > 0) {
+            timeLeft = {
+                days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+                hours: Math.floor((difference / (1000 * 60 * 60))),
+                minutes: Math.floor((difference / 1000 / 60) % 60),
+                seconds: Math.floor((difference / 1000) % 60)
+            };
+        }
+
+        return timeLeft;
+    }
 
 
+    const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
 
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setTimeLeft(calculateTimeLeft());
+        }, 1000);
+        return () => clearTimeout(timer);
+    });
 
-    // var x = setInterval(function() {
-    //
-    //     // Get today's date and time
-    //     var now = new Date().getTime();
-    //
-    //     // Find the distance between now and the count down date
-    //     var distance = countDownDate - now;
-    //
-    //     // Time calculations for days, hours, minutes and seconds
-    //     var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    //     var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    //     var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    //     var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-    //
-    //     setDay(days)
-    //     setHour(hours)
-    //     setMinute(minutes)
-    //     setSecond(seconds)
-    //
-    // }, 1000);
+    const timerComponents = [];
 
-
-return(
-    <Typography sx={{ fontSize: 24 }} color="text.secondary" gutterBottom>
-        {day}:{hour}:{minute}:{second}
-    </Typography>
-);
-
+    console.log(timeLeft)
+    return (
+        <div>
+            {timeLeft.hours + ":" + timeLeft.minutes + ":" + timeLeft.seconds}
+        </div>
+    );
 }
+export default observer(Timer);
