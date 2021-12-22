@@ -1,4 +1,4 @@
-import {AppBar, Box, Button, Toolbar, Typography} from "@mui/material";
+import {AppBar, Box, Button, DialogTitle, Toolbar, Typography} from "@mui/material";
 import * as React from 'react';
 
 import IconButton from '@mui/material/IconButton';
@@ -35,14 +35,10 @@ function NavMenu(props) {
     const handleClose = () => {
         setOpen(false);
     };
-    const handleLogin = () => {
-        const tempuser = {
-            logged: true,
-            token: null,
-            username: null
-        }
-        store.setUser(tempuser);
-        console.log(store.user.logged)
+    const handleLogin = (event) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+        store.login(data.get('email'),data.get('password'));
         setOpen(false);
     };
     return (
@@ -53,7 +49,7 @@ function NavMenu(props) {
                         Weekly
                     </Typography>
                     {store.user.logged ? (
-                        <div>
+                        <div> {store.user.username}
                             <IconButton
                                 size="large"
                                 aria-label="account of current user"
@@ -89,11 +85,14 @@ function NavMenu(props) {
                                 Login
                             </Button>
                             <Dialog open={open} onClose={handleClose}>
+                                <DialogTitle>Log ind</DialogTitle>
                                 <DialogContent>
+                                    <Box component="form" onSubmit={handleLogin} noValidate>
                                     <TextField
                                         autoFocus
                                         margin="dense"
                                         id="email"
+                                        name="email"
                                         label="Email Address"
                                         type="email"
                                         fullWidth
@@ -103,16 +102,25 @@ function NavMenu(props) {
                                         autoFocus
                                         margin="dense"
                                         id="password"
+                                        name="password"
                                         label="Password"
                                         type="password"
                                         fullWidth
                                         variant="standard"
                                     />
+                                        <Box
+                                            sx={{
+                                                display: 'flex',
+                                                flexDirection: 'row-reverse',
+                                                p: 1,
+                                                m: 1
+                                            }}
+                                        >
+                                            <Button type="submit">Log ind</Button>
+                                            <Button onClick={handleClose}>Annullere</Button>
+                                        </Box>
+                                    </Box>
                                 </DialogContent>
-                                <DialogActions>
-                                    <Button onClick={handleClose}>Cancel</Button>
-                                    <Button onClick={handleLogin}>Login</Button>
-                                </DialogActions>
                             </Dialog>
                         </div>
                     )}

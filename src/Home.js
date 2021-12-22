@@ -6,7 +6,7 @@ import {
     DialogContent,
     DialogContentText,
     DialogTitle,
-    Grid,
+    Grid, Paper,
     TextField,
     ThemeProvider
 } from "@mui/material";
@@ -20,6 +20,7 @@ import {timerStore} from "./stores/TimerStore";
 import {observer} from "mobx-react-lite";
 import {userStore} from "./stores/UserStore";
 import {AddCircleOutlined} from "@mui/icons-material";
+import {weekStore} from "./stores/WeekStore";
 function Home(){
     const [value, setValue] = React.useState(null);
     const [open, setOpen] = React.useState(false);
@@ -84,6 +85,21 @@ function Home(){
 
             </Grid>
         </Grid>
+    <Box sx={{mt:2}}>
+    <div className="weekgrid">
+        {weekStore.week.days.map((day) =>
+            <Paper key={day.day} sx={{
+                height: "500px",
+                width: "100%",
+            }}>
+
+                <Typography align="center" sx={{padding: "5px", color: "gray"}}>
+                    {day.name}
+                </Typography>
+            </Paper>
+        )}
+    </div>
+    </Box>
 </Box>
     );
 
