@@ -88,7 +88,7 @@ function Home(){
     <Box sx={{mt:2}}>
     <div className="weekgrid">
         {weekStore.week.days.map((day) =>
-            <Paper key={day.day} sx={{
+            <Paper key={day.name} sx={{
                 height: "500px",
                 width: "100%",
             }}>

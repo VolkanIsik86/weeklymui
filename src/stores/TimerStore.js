@@ -1,4 +1,5 @@
 import {makeAutoObservable, runInAction} from "mobx";
+import {config} from "../Constants/Constants";
 
 class TimerStore{
     timer = {}
@@ -11,11 +12,13 @@ class TimerStore{
             method: 'GET',
             redirect: 'follow'
         };
+        console.log(config.url)
 
-        fetch("http://localhost:47340/Gubi", requestOptions)
+        fetch(config.url.API_URL + "/Gubi", requestOptions)
             .then(response => response.json())
             .then(result => {
                 console.log(result)
+                console.log("hej fra timerstrore")
                 runInAction(()=> this.timer = result)
             })
             .catch(error => console.log('error', error));
@@ -26,7 +29,7 @@ class TimerStore{
             redirect: 'follow'
         };
 
-        fetch("https://localhost:44371/Gubi/time", requestOptions)
+        fetch(config.url.API_URL + "/Gubi/time", requestOptions)
             .then(response => response.json())
             .then(result => {
                 console.log(result)

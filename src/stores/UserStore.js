@@ -1,4 +1,5 @@
 import {makeAutoObservable, runInAction} from "mobx";
+import {config} from "../Constants/Constants";
 
 class UserStore{
     user = {
@@ -32,7 +33,7 @@ class UserStore{
             redirect: 'follow'
         };
 
-        fetch("https://localhost:44371/User/authentication", requestOptions)
+        fetch(config.url.API_URL + "/User/authentication", requestOptions)
             .then(response => response.text())
             .then(result => {
                 console.log(result)
