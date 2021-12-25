@@ -9,6 +9,7 @@ class WeekStore{
                 dato : "20/12/2021",
                 todos : [
                     {
+                        id : "s123fdsge32",
                         dato : "20/12/2021",
                         beskrivelse : "V - arbejde til 17:00"
                     }

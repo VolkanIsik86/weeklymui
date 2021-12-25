@@ -3,11 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css'
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {HashRouter} from "react-router-dom";
-import CssBaseline from '@mui/material/CssBaseline';
 import {userStore} from "./stores/UserStore";
-import {useMediaQuery} from "@mui/material";
 
 ReactDOM.render(
 
