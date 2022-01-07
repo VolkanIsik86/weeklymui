@@ -1,77 +1,84 @@
-import {makeAutoObservable} from "mobx";
+import {makeAutoObservable, runInAction} from "mobx";
+import {config} from "../Constants/Constants";
 
 class WeekStore{
     week = {
-        number : 50,
+        weekNr : 50,
         days : [
             {
                 name : "Mandag",
-                dato : "20/12/2021",
-                todos : [
+                date : "20/12/2021",
+                toDos : [
                     {
-                        id : "s123fdsge32",
-                        dato : "20/12/2021",
-                        beskrivelse : "V - arbejde til 17:00"
+                        date : "20/12/2021",
+                        task : "V - arbejde til 17:00",
+                        id : 12
                     }
                 ]
             },
             {
                 name : "Tirsdag",
-                dato : "21/12/2021",
-                todos : [
+                date : "21/12/2021",
+                toDos : [
                     {
-                        dato : "21/12/2021",
-                        beskrivelse : "V - arbejde til 17:00"
+                        date : "21/12/2021",
+                        task : "V - arbejde til 17:00",
+                        id : 13
                     }
                 ]
             },
             {
                 name : "Onsdag",
-                dato : "22/12/2021",
-                todos : [
+                date : "22/12/2021",
+                toDos : [
                     {
-                        dato : "22/12/2021",
-                        beskrivelse : "V - arbejde til 17:00"
+                        date : "22/12/2021",
+                        task : "V - arbejde til 17:00",
+                        id : 14
                     }
                 ]
             },
             {
                 name : "Torsdag",
-                dato : "23/12/2021",
-                todos : [
+                date : "23/12/2021",
+                toDos : [
                     {
-                        dato : "23/12/2021",
-                        beskrivelse : "V - arbejde til 17:00"
+                        date : "23/12/2021",
+                        task : "V - arbejde til 17:00",
+                        id : 15
                     }
                 ]
             },
             {
                 name : "Fredag",
-                dato : "24/12/2021",
-                todos : [
+                date : "24/12/2021",
+                toDos : [
                     {
-                        dato : "24/12/2021",
-                        beskrivelse : "V - arbejde til 17:00"
+                        date : "24/12/2021",
+                        task : "V - arbejde til 17:00",
+                        id : 16
                     }
                 ]
             },
             {
                 name : "Lørdag",
-                dato : "25/12/2021",
-                todos : [
+                date : "25/12/2021",
+                toDos : [
                     {
-                        dato : "25/12/2021",
-                        beskrivelse : "V - arbejde til 17:00"
+                        date : "25/12/2021",
+                        task : "V - arbejde til 17:00",
+                        id : 17
                     }
                 ]
             },
             {
                 name : "Søndag",
-                dato : "26/12/2021",
-                todos : [
+                date : "26/12/2021",
+                toDos : [
                     {
-                        dato : "26/12/2021",
-                        beskrivelse : "V - arbejde til 17:00"
+                        date : "26/12/2021",
+                        task : "V - arbejde til 17:00",
+                        id : 18
                     }
                 ]
             },
@@ -79,7 +86,27 @@ class WeekStore{
         ]
     }
     constructor() {
-        makeAutoObservable(this)
+        makeAutoObservable(this);
+        this.fetch();
+    }
+
+    fetch(){
+        var requestOptions = {
+            method: 'GET',
+            redirect: 'follow'
+        };
+
+        fetch(config.url.API_URL + "/ToDo/weekly", requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                runInAction(()=> this.week = result);
+                console.log(result);
+            })
+            .catch(error => console.log('error', error));
+    }
+
+    add(){
+
     }
 
 }
