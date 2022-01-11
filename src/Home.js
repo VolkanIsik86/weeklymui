@@ -5,7 +5,7 @@ import {
     DialogContent,
     DialogContentText,
     DialogTitle,
-    Grid, Paper, Popover,
+    Grid, Menu, MenuItem, Paper, Popover, Snackbar,
     TextField,
 } from "@mui/material";
 import {Button, Card, CardActions, CardContent, Typography} from "@mui/material";
@@ -23,21 +23,45 @@ import deLocale from 'date-fns/locale/da';
 import IconButton from "@mui/material/IconButton";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import MuiAlert from '@mui/material/Alert';
+
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 function Home() {
+
+
+
+
+    //Date value
     const [value, setValue] = React.useState(null);
+
+    //Dateedit value
+    const [editvalue, editsetValue] = React.useState(null);
+
+
+    //Snackbar
+    const [snackMessage,setSnackMessage] = React.useState(null);
+    const [snackType,setSnackType] = React.useState(null);
+    const [snackopen, snacksetOpen] = React.useState(false);
+
+    const snackhandleClick = () => {
+        snacksetOpen(true);
+    };
+
+    const snackhandleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        snacksetOpen(false);
+    };
+
+
+    //Dialog for to do
     const [open, setOpen] = React.useState(false);
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const pophandleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const pophandleClose = () => {
-        setAnchorEl(null);
-    };
-
-    const popopen = Boolean(anchorEl);
-    const popid = open ? 'simple-popover' : undefined;
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -46,24 +70,89 @@ function Home() {
         setOpen(false);
     };
 
+    //Dialog for to do2
+    const [editopen, editsetOpen] = React.useState(false);
+    const [editmessage,seteditmessage] = React.useState(null);
+    const [editid,seteditid] = React.useState(null);
+    const edithandleClickOpen = (date,id,message) => {
+        //editsetValue(date)
+        console.log(date)
+        const datearray = date.split(".");
+        const d = new Date(datearray[2],(datearray[1]-1),datearray[0]);
+        editsetValue(d);
+        seteditmessage(message);
+        seteditid(id);
+        editsetOpen(true);
+    };
+
+    const edithandleClose = () => {
+        editsetOpen(false);
+    };
+
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         const beskrivelse = data.get("beskrivelse");
-        let date = value.getDate()+"."+(value.getMonth()+1)+"."+value.getFullYear();
+        if(beskrivelse == null || beskrivelse === " " || beskrivelse === "" || value == null){
+            snackShow("warning","Dato og beskrivelse skal udfyldes.")
+            return;
+        }
+        let day = '' + value.getDate();
+        let month = '' + value.getMonth()+1
+        let year = value.getFullYear()
+
+        if(day.length < 2){
+            day = '0' + day;
+        }
+        if(month.length < 2){
+            month = '0' + month
+        }
+
+        const date = day + "." + month + "." + year;
         console.log(date)
         console.log(beskrivelse);
         setOpen(false);
-        //TODO: Control for null og implementere resten
+        weekStore.add(date,beskrivelse,snackShow);
     }
 
-    function editTask (task) {
-      console.log(task)
-        //TODO: denne skal implementeres
+    function snackShow(type, message){
+       setSnackType(type);
+       setSnackMessage(message);
+       snackhandleClick();
+    }
+
+    const editTask = (event) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+        const beskrivelse = data.get("beskrivelse");
+        if(beskrivelse == null || beskrivelse === " " || beskrivelse === "" || editvalue == null){
+            snackShow("warning","Dato og beskrivelse skal udfyldes.")
+            return;
+        }
+        let day = '' + editvalue.getDate();
+        let month = '' + editvalue.getMonth()+1
+        let year = editvalue.getFullYear()
+
+        if(day.length < 2){
+            day = '0' + day;
+        }
+        if(month.length < 2){
+            month = '0' + month
+        }
+
+        const date = day + "." + month + "." + year;
+        console.log(date)
+        console.log(beskrivelse);
+        setOpen(false);
+        weekStore.put(editid,date,beskrivelse,snackShow);
+        edithandleClose();
     }
     function deleteTask (task) {
         console.log(task)
-        //TODO: denne skal implementeres
+        if(editid != null) {
+            weekStore.delete(task, snackShow);
+            edithandleClose();
+        }
     }
 
     return (
@@ -159,35 +248,74 @@ function Home() {
 
                             }}>
                                 {day.toDos.map((todo)=>
-                                    <div>
-                                    <Paper key={todo.id} sx={{m: 1, p: 1, width: "90%"}} elevation={3} onClick={pophandleClick}>
+
+                                    <Paper key={todo.id}
+                                           sx={{m: 1, p: 1, width: "90%"}}
+                                           elevation={3}
+                                           onClick={() => edithandleClickOpen(day.date,todo.id,todo.task)}
+                                    >
                                         <Typography align="left" sx={{color: "gray"}}>
                                             {todo.task}
                                         </Typography>
                                     </Paper>
-                                        <Popover
-                                            id={popid}
-                                            open={popopen}
-                                            anchorEl={anchorEl}
-                                            onClose={pophandleClose}
-                                            anchorOrigin={{
-                                                vertical: 'bottom',
-                                                horizontal: 'left',
-                                            }}
-                                        >
-                                            <IconButton aria-label="edit" onClick={() => editTask(todo.id)}>
-                                                <EditIcon />
-                                            </IconButton>
-                                            <IconButton aria-label="delete" onClick={() => deleteTask(todo.id)}>
-                                                <DeleteIcon />
-                                            </IconButton>
-                                        </Popover>
-                                    </div>
+
+
+
                                 )}
                             </Box>
                         </Paper>
                     )}
                 </div>
+
+                <Dialog open={editopen} onClose={edithandleClose}>
+                    <DialogTitle>Rediger en todo:</DialogTitle>
+                    <DialogContent>
+
+                        <Box sx={{m: 1}}>
+                            <LocalizationProvider dateAdapter={AdapterDateFns} locale={deLocale}>
+                                <DatePicker
+                                    label="Vælg Dato"
+                                    value={editvalue}
+                                    onChange={(newValue) => {
+                                        editsetValue(newValue);
+                                    }}
+                                    renderInput={(params) => <TextField {...params} />}
+                                />
+                            </LocalizationProvider>
+                        </Box>
+
+                        <Box sx={{m: 1}} component="form" onSubmit={editTask} noValidate>
+                            <TextField
+                                autoFocus
+                                margin="dense"
+                                id="beskrivelse"
+                                name="beskrivelse"
+                                label="Beskrivelse"
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                                defaultValue={editmessage}
+                            />
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'row-reverse',
+                                    mt:1
+                                }}
+                            >
+                                <Button type="submit" >Rediger</Button>
+                                <Button onClick={() => deleteTask(editid)}>Slet</Button>
+                                <Button onClick={edithandleClose}>Annullere</Button>
+                            </Box>
+                        </Box>
+                    </DialogContent>
+
+                </Dialog>
+                <Snackbar open={snackopen} autoHideDuration={6000} onClose={snackhandleClose}>
+                    <Alert onClose={snackhandleClose} severity={snackType} sx={{ width: '100%' }}>
+                        {snackMessage}
+                    </Alert>
+                </Snackbar>
             </Box>
         </Box>
     );
