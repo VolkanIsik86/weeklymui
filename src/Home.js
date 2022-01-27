@@ -20,9 +20,6 @@ import {userStore} from "./stores/UserStore";
 import {AddCircleOutlined} from "@mui/icons-material";
 import {weekStore} from "./stores/WeekStore";
 import deLocale from 'date-fns/locale/da';
-import IconButton from "@mui/material/IconButton";
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
 import MuiAlert from '@mui/material/Alert';
 
 
@@ -76,7 +73,7 @@ function Home() {
     const [editid,seteditid] = React.useState(null);
     const edithandleClickOpen = (date,id,message) => {
         //editsetValue(date)
-        console.log(date)
+
         const datearray = date.split(".");
         const d = new Date(datearray[2],(datearray[1]-1),datearray[0]);
         editsetValue(d);
@@ -109,8 +106,6 @@ function Home() {
         }
 
         const date = day + "." + month + "." + year;
-        console.log(date)
-        console.log(beskrivelse);
         setOpen(false);
         weekStore.add(date,beskrivelse,snackShow);
     }
@@ -141,14 +136,11 @@ function Home() {
         }
 
         const date = day + "." + month + "." + year;
-        console.log(date)
-        console.log(beskrivelse);
         setOpen(false);
         weekStore.put(editid,date,beskrivelse,snackShow);
         edithandleClose();
     }
     function deleteTask (task) {
-        console.log(task)
         if(editid != null) {
             weekStore.delete(task, snackShow);
             edithandleClose();

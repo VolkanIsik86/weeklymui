@@ -43,7 +43,7 @@ function Timer(){
 
     const timerComponents = [];
 
-    console.log(timeLeft)
+
     return (
         <div>
             {timeLeft.hours + ":" + timeLeft.minutes + ":" + timeLeft.seconds}

@@ -16,7 +16,6 @@ class UserStore{
     }
 
     login(username, password){
-        console.log(username + " " + password);
 
         let myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
@@ -36,7 +35,6 @@ class UserStore{
         fetch(config.url.API_URL + "/User/authentication", requestOptions)
             .then(response => response.text())
             .then(result => {
-                console.log(result)
 
                 const temp = {
                     logged : true,

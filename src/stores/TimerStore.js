@@ -12,13 +12,10 @@ class TimerStore{
             method: 'GET',
             redirect: 'follow'
         };
-        console.log(config.url)
 
         fetch(config.url.API_URL + "/Gubi", requestOptions)
             .then(response => response.json())
             .then(result => {
-                console.log(result)
-                console.log("hej fra timerstrore")
                 runInAction(()=> this.timer = result)
             })
             .catch(error => console.log('error', error));
@@ -32,7 +29,6 @@ class TimerStore{
         fetch(config.url.API_URL + "/Gubi/time", requestOptions)
             .then(response => response.json())
             .then(result => {
-                console.log(result)
                 runInAction(()=> this.timer = result)
             })
             .catch(error => console.log('error', error));
