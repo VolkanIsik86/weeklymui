@@ -17,10 +17,11 @@ import './timer2/flipdown.css'
 import {timerStore} from "./stores/TimerStore";
 import {observer} from "mobx-react-lite";
 import {userStore} from "./stores/UserStore";
-import {AddCircleOutlined} from "@mui/icons-material";
+import {Add, AddCircleOutlined} from "@mui/icons-material";
 import {weekStore} from "./stores/WeekStore";
 import deLocale from 'date-fns/locale/da';
 import MuiAlert from '@mui/material/Alert';
+import IconButton from "@mui/material/IconButton";
 
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -147,11 +148,38 @@ function Home() {
         }
     }
 
+    function addSmiley(){
+        timerStore.addSmiley();
+    }
+
+    function deleteSmiley(){
+        timerStore.deleteSmiley();
+    }
+
+    const smileys = [];
+
+    if(timerStore.smiley.timestamp === 0){
+        if(userStore.user.logged)
+            smileys.push(<IconButton aria-label="Tilføj" onClick={addSmiley}><Add /></IconButton>);
+        else
+            smileys.push(<IconButton aria-label="Tilføj" onClick={addSmiley} disabled><Add /></IconButton>);
+    }
+
+    for (let i = 0; i < timerStore.smiley.timestamp ; i++) {
+        smileys.push("😃");
+        if(i === (timerStore.smiley.timestamp - 1) && i !== 4) {
+            if(userStore.user.logged)
+                smileys.push(<IconButton aria-label="Tilføj" onClick={addSmiley}><Add /></IconButton>);
+            else
+                smileys.push(<IconButton aria-label="Tilføj" onClick={addSmiley} disabled><Add /></IconButton>);
+        }
+    }
+
     return (
         <Box sx={{m: 3}}>
-            <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
-                    <Card sx={{minWidth: 275}}>
+            <Grid container spacing={3}>
+                <Grid item xs={12} sm="auto">
+                    <Card sx={{minWidth: 275, height:170}}>
                         <CardContent>
                             <Typography sx={{fontSize: 28}} color="text.secondary" gutterBottom>
                                 Gubi
@@ -165,7 +193,40 @@ function Home() {
                         </CardActions>
                     </Card>
                 </Grid>
+                <Grid item xs={12} sm={3}>
+                    <Card sx={{minWidth: 275,height:170}}>
+                        <CardContent>
+                            <Typography sx={{fontSize: 28}} color="text.secondary" gutterBottom>
+                                Ayla's smileys
+                            </Typography>
+                            <Typography sx={{fontSize: 24}} gutterBottom>
+                                {smileys}
+                            </Typography>
+                            {userStore.user.logged ?
+                                <Box>
+                                    <Button variant="contained" onClick={deleteSmiley}>Nulstil</Button>
+                                </Box>:
+                                <Box>
+                                    <Button variant="contained" disabled>Nulstil</Button>
+                                </Box>}
+                        </CardContent>
+                    </Card>
+                </Grid>
                 <Grid item xs={12} sm={6}>
+                    <Card sx={{minWidth: 275,height:170}}>
+                        <CardContent>
+                            <Typography sx={{fontSize: 28}} color="text.secondary" gutterBottom>
+                                Indkøbsliste
+                            </Typography>
+                            {userStore.user.logged ?
+                                <Box>
+                                    <Button variant="contained">Tilføj</Button> <Button variant="contained">Nulstil</Button>
+                                </Box>:
+                                <Box>
+                                    <Button variant="contained" disabled>Tilføj</Button> <Button variant="contained" disabled>Nulstil</Button>
+                                </Box>}
+                        </CardContent>
+                    </Card>
                 </Grid>
             </Grid>
             <Box sx={{mt: 2}}>
