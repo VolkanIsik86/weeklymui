@@ -96,8 +96,8 @@ function Home() {
             return;
         }
         let day = '' + value.getDate();
-        let month = '' + value.getMonth()+1
-        let year = value.getFullYear()
+        let month = '' + (value.getMonth()+1);
+        let year = value.getFullYear();
 
         if(day.length < 2){
             day = '0' + day;
